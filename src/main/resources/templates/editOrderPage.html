@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Order</title>
+</head>
+<body>
+
+    <h2>Edit Order</h2>
+
+    <!-- Display a message if available -->
+    <p th:if="${message}" th:text="${message}" style="color: green;"></p>
+
+    <form action="/orders/update" method="post">
+        <!-- Hidden input field for the Order ID -->
+        <input type="hidden" id="id" name="id" th:value="${order.id}">
+
+        <!-- Input fields for Order properties -->
+        <!-- Add more fields based on your Order entity -->
+        
+        <button type="submit">Update Order</button>
+    </form>
+
+    <br>
+
+    <a href="/orders">Back to All Orders</a>
+
+</body>
+</html>

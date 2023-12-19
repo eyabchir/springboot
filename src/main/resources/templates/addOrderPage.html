@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Order</title>
+</head>
+<body>
+
+    <h2>Add Order</h2>
+
+
+    <p th:if="${message}" th:text="${message}" style="color: green;"></p>
+
+    <form action="/orders/save" method="post">
+     
+        <button type="submit">Add Order</button>
+    </form>
+
+    <br>
+
+    <a href="/orders">Back to All Orders</a>
+    <br>
+   
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Orders</title>
+</head>
+<body>
+
+    <h2>All Orders</h2>
+
+  
+    <p th:if="${message}" th:text="${message}" style="color: green;"></p>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+           
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="order : ${list}">
+                <td th:text="${order.id}"></td>
+                <td>
+                    <a th:href="@{/orders/edit?id=${order.id})}">Edit</a>
+                    <a th:href="@{/orders/delete?id=${order.id})}" onclick="return confirm('Are you sure?')">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+
+    <a href="/orders/add">Add Order</a>
+    <br>
+  
+</body>
+</html>
