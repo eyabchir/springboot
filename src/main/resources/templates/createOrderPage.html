@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Order</title>
+   
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        form {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        input,
+        select,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .total-price {
+            font-weight: bold;
+            color: #333;
+            margin-top: 15px;
+        }
+
+        .back-to-home {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-to-home a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .back-to-home a:hover {
+            text-decoration: underline;
+        }
+
+        .success-message {
+            color: green;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Create Order</h2>
+
+    <form action="/order/save" method="post">
+        <!-- Client Name -->
+        <label for="client">Client Name:</label>
+        <input type="text" id="client" name="client" required><br>
+
+        <!-- Order Date -->
+        <label for="orderDate">Order Date:</label>
+        <input type="date" id="orderDate" name="orderDate" required><br>
+
+        <!-- Search Medicament -->
+        <label for="searchMedicament">Search Medicament:</label>
+        <input type="text" id="searchMedicament" oninput="filterMedicaments()" placeholder="Type to search...">
+
+        <!-- Order Items (List of Medicaments with Quantities) -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Medicament</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody id="medicamentTableBody">
+                <!-- Loop through the list of available medicaments -->
+                <tr th:each="medicament : ${medicaments}">
+                    <td th:text="${medicament.nom}"></td>
+                    <td th:text="${medicament.price}"></td>
+                    <td>
+                        <input type="number" id="quantity_${medicament.id}" name="quantities" min="0" value="0">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Total Price -->
+        <p class="total-price">Total Price: <span id="totalPrice">0.00 </span></p>
+
+        <button type="button" onclick="calculateTotalPrice()">Calculate Total Price</button>
+        <button type="submit">Save Order</button>
+
+    </form>
+
+    <p class="success-message" th:if="${successMessage}" th:text="${successMessage}"></p>
+
+    <div class="back-to-home">
+        <a href="/">Back to Home</a>
+    </div>
+
+    <script>
+        function calculateTotalPrice() {
+            var total = 0;
+            // Loop through each row in the table
+           document.querySelectorAll('tbody tr').forEach(function(row) {
+                var price = parseFloat(row.cells[1].innerText);
+                var quantity = parseInt(row.cells[2].querySelector('input').value);
+                total += price * quantity;
+            });
+            // Update the total price display
+            document.getElementById('totalPrice').innerText = total.toFixed(2);
+        }
+
+        function filterMedicaments() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("searchMedicament");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("medicamentTableBody");
+            tr = table.getElementsByTagName("tr");
+
+            for (i = 0; i < tr.length; i++) {
+                var nameCell = tr[i].cells[0];
+                var priceCell = tr[i].cells[1];
+
+                if (nameCell || priceCell) {
+                    var nameValue = nameCell.textContent || nameCell.innerText;
+                    var priceValue = priceCell.textContent || priceCell.innerText;
+
+                    var concatValue = nameValue + priceValue;
+
+                    if (concatValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>

@@ -80,6 +80,8 @@
         <!-- Label and textarea for 'Description' -->
         <label for="description">Description:</label>
         <textarea id="description" name="description" rows="4" cols="50" th:text="${medicament.description}"></textarea>
+         <label for="price">Prix:</label>
+        <textarea id="price" name="price" rows="4" cols="50" th:text="${medicament.price}"></textarea>
 
         <!-- Button to submit the form -->
         <button type="submit">Update Medicament</button>

@@ -7,7 +7,7 @@
     <title>Ajouter Medicament</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 20px;
             background-color: #f4f4f4;
         }
@@ -15,6 +15,7 @@
         h2 {
             color: #333;
             text-align: center;
+            margin-bottom: 20px;
         }
 
         form {
@@ -28,8 +29,9 @@
 
         label {
             display: block;
-            margin-bottom: 8px;
-            color: #333;
+            margin-bottom: 10px;
+            color: #007bff;
+            font-weight: bold;
         }
 
         input, textarea {
@@ -43,13 +45,14 @@
         }
 
         button {
-            background-color: #007bff;
+            background-color: #4CAF50;
             color: #fff;
-            padding: 10px 20px;
+            padding: 12px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            transition: background-color 0.3s ease-in-out;
         }
 
         button:hover {
@@ -62,6 +65,7 @@
             text-align: center;
             color: #007bff;
             text-decoration: none;
+            font-weight: bold;
         }
 
         a:hover {
@@ -78,19 +82,19 @@
 
     <form action="/medicament/save" method="post">
         <!-- Input fields for Medicament properties -->
-        <label for="nom">Nom:</label>
+        <label for="Nom">Nom:</label>
         <input type="text" id="nom" name="nom" th:value="${medicament.nom}" required>
 
-        <label for="quantite">Quantité:</label>
+        <label for="Quantite">Quantité:</label>
         <input type="number" id="quantite" name="quantite" th:value="${medicament.quantite}" required>
 
-        <label for="description">Description:</label>
+        <label for="Description">Description:</label>
         <textarea id="description" name="description" rows="4" cols="50" th:text="${medicament.description}"></textarea>
 
-        <!-- Add a hidden input field for the ID if needed -->
-        <!-- <input type="hidden" id="id" name="id" th:value="${medicament.id}"> -->
+        <label for="price">Prix:</label>
+        <input type="number" id="price" name="price" th:value="${medicament.price}" required>
 
-        <button type="submit">Ajouter Medicament</button>
+        <button  type="submit">Ajouter Medicament</button>
     </form>
 
     <a th:href="@{/medicament/getAllMedicaments}">Retourner à la liste des médicaments</a>

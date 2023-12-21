@@ -1,11 +1,11 @@
-/*package com.example.Pharmacie.controller;
+package com.example.Pharmacie.controller;
 
-import com.example.Pharmacie.Service.OrderService;
 import com.example.Pharmacie.model.Medicament;
 import com.example.Pharmacie.model.Order;
-import com.example.Pharmacie.model.OrderItem;
+import com.example.Pharmacie.model.OrderMedicament;
 import com.example.Pharmacie.repository.MedicamentRepository;
-
+import com.example.Pharmacie.Service.OrderMedicamentService;
+import com.example.Pharmacie.Service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/orders")
+@RequestMapping("/order")
 public class OrderController {
 
     @Autowired
@@ -23,57 +23,50 @@ public class OrderController {
     @Autowired
     private MedicamentRepository medicamentRepository;
 
-    @GetMapping("/")
-    public String getAllOrders(Model model) {
-        List<Order> orders = orderService.getAllOrders();
-        model.addAttribute("list", orders);
-        return "allOrdersPage";
-    }
-
-    @GetMapping("/add")
-    public String showAddOrderPage(Model model) {
-        List<Medicament> allMedicaments = medicamentRepository.findAll();
-        model.addAttribute("medicaments", allMedicaments);
+    @GetMapping("/create")
+    public String showCreateOrderPage(Model model) {
+        List<Medicament> medicaments = medicamentRepository.findAll();
+        model.addAttribute("medicaments", medicaments);
         model.addAttribute("order", new Order());
-        return "addOrderPage";
+        return "createOrderPage";
     }
 
     @PostMapping("/save")
     public String saveOrder(@ModelAttribute Order order, Model model) {
-        orderService.saveOrder(order);
-        Long id = order.getId();
-        String message = "Record with id: '" + id + "' is saved successfully!";
-        model.addAttribute("message", message);
-        return "addOrderPage";
-    }
-        @PostMapping("/create")
-        public String createOrderFromMedicament(@RequestParam Long medicamentId, Model model) {
-            Medicament medicament = medicamentRepository.findById(medicamentId).orElse(null);
+        List<Medicament> medicaments = order.getMedicaments();
 
-            if (medicament != null) {
-                Order order = orderService.findOrderByMedicament(medicament);
+        if (medicaments != null) {
+            for (Medicament medicament : medicaments) {
+                // Create a new OrderMedicament instance
+                OrderMedicament orderMedicament = new OrderMedicament();
+                orderMedicament.setOrder(order);
+                orderMedicament.setMedicament(medicament);
+                
+                
+                OrderMedicamentService orderMedicamentService = new OrderMedicamentService(null);
+				orderMedicamentService.saveOrderMedicament(orderMedicament);
 
-                if (order == null) {
-                    order = new Order();
-                }
-
-                OrderItem orderItem = new OrderItem();
-                orderItem.setMedicament(medicament);
-                orderItem.setQuantity(1);
-
-                order.getItems().add(orderItem);
-                orderService.saveOrder(order);
-
-                String message = "Order created successfully with medicament: " + medicament.getNom();
-                model.addAttribute("message", message);
-            } else {
-                model.addAttribute("message", "Failed to create order. Medicament not found.");
+                // Assuming you have bidirectional relationships in Medicament and OrderMedicament
+                List<OrderMedicament> orderMedicamentList = medicament.getOrderMedicaments();
+                orderMedicamentList.add(orderMedicament);
+                medicament.setOrderMedicaments(orderMedicamentList);
             }
-
-            return "redirect:/orders/add";
         }
 
+        // Save the order and associated entities (Medicament and Order) using your service or repository
+        orderService.saveOrder(order);
+
+        Long id = order.getId(); // Assuming you want the ID of the order
+        String successMessage = "Order with id: '" + id + "' created successfully!";
+        model.addAttribute("successMessage", successMessage);
+        return "createOrderPage";
+    }
+    @GetMapping("/order/all")
+    public String getAllOrders(Model model) {
+        List<Order> orders = orderService.getAllOrders();
+        model.addAttribute("orders", orders);
+        return "allOrdersPage";
     }
 
- */
+}
 

@@ -5,37 +5,86 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Orders</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .back-to-home {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 
     <h2>All Orders</h2>
 
-  
-    <p th:if="${message}" th:text="${message}" style="color: green;"></p>
+    <!-- Display a message if available -->
+    <p style="color: green; text-align: center;">Message: <span th:if="${message}" th:text="${message}"></span></p>
 
-    <table border="1">
+    <table>
         <thead>
             <tr>
                 <th>ID</th>
-           
-                <th>Action</th>
+                <th>Client</th>
+                <th>Order Date</th>
+                <!-- Add more columns as needed -->
             </tr>
         </thead>
         <tbody>
-            <tr th:each="order : ${list}">
+            <!-- Loop through the list of orders -->
+            <tr th:each="order : ${orders}">
                 <td th:text="${order.id}"></td>
-                <td>
-                    <a th:href="@{/orders/edit?id=${order.id})}">Edit</a>
-                    <a th:href="@{/orders/delete?id=${order.id})}" onclick="return confirm('Are you sure?')">Delete</a>
-                </td>
+                <td th:text="${order.client}"></td>
+                <td th:text="${#dates.format(order.orderDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <!-- Add more columns as needed -->
             </tr>
         </tbody>
     </table>
 
-    <br>
+    <div class="back-to-home">
+        <a href="/">Back to Home</a>
+    </div>
 
-    <a href="/orders/add">Add Order</a>
-    <br>
-  
 </body>
 </html>

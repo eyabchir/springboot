@@ -7,14 +7,15 @@
     <title>All Medicaments</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 20px;
-            background-color: #f4f4f4;
+            background-color: #f8f8f8;
         }
 
         h2 {
             color: #333;
             text-align: center;
+            margin-bottom: 20px;
         }
 
         table {
@@ -22,12 +23,12 @@
             border-collapse: collapse;
             margin-top: 20px;
             background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         th, td {
             border: 1px solid #ddd;
-            padding: 12px;
+            padding: 15px;
             text-align: left;
         }
 
@@ -52,16 +53,25 @@
 
         .action-button {
             display: inline-block;
-            padding: 10px 20px;
+            padding: 12px 20px;
             background-color: #007bff;
             color: #fff;
             text-decoration: none;
             border-radius: 5px;
             margin-right: 10px;
+            transition: background-color 0.3s ease-in-out;
         }
 
         .action-button:hover {
             background-color: #0056b3;
+        }
+
+        .delete-button {
+            background-color: #dc3545;
+        }
+
+        .delete-button:hover {
+            background-color: #bd2130;
         }
 
         .back-to-home {
@@ -76,7 +86,7 @@
     <h2>All Medicaments</h2>
 
     <!-- Display a message if available -->
-    <p style="color: green; text-align: center;">Message: <span th:if="${message}" th:text="${message}"></span></p>
+    <p style="color: #28a745; text-align: center;">Message: <span th:if="${message}" th:text="${message}"></span></p>
 
     <table>
         <thead>
@@ -85,7 +95,8 @@
                 <th>Nom</th>
                 <th>Quantité</th>
                 <th>Description</th>
-                <th>Action</th>
+                <th>Prix</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -95,10 +106,10 @@
                 <td th:text="${medicament.nom}"></td>
                 <td th:text="${medicament.quantite}"></td>
                 <td th:text="${medicament.description}"></td>
+                <td th:text="${medicament.price}"></td>
                 <td>
                     <a class="action-button" th:href="@{/medicament/edit(id=${medicament.id})}">Edit</a>
-                  <a class="action-button" th:href="@{/medicament/delete(id=${medicament.id})}" onclick="return confirm('Are you sure?')">Delete</a>
-
+                    <a class="action-button delete-button" th:href="@{/medicament/delete(id=${medicament.id})}" onclick="return confirm('Are you sure?')">Delete</a>
                 </td>
             </tr>
         </tbody>
@@ -114,4 +125,3 @@
 
 </body>
 </html>
-

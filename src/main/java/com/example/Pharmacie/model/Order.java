@@ -1,42 +1,84 @@
-/*package com.example.Pharmacie.model;
+package com.example.Pharmacie.model;
 
-import java.util.ArrayList;
+import jakarta.persistence.*;
+
+import java.util.Date;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "orders") 
 public class Order {
- @Id
- @GeneratedValue(strategy = GenerationType.IDENTITY)
- private Long id;
 
- public Long getId() {
-	return id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String client;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "order_date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date orderDate;
+    
+
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+
+
+	public String getClient() {
+		return client;
+	}
+
+
+
+
+	public void setClient(String client) {
+		this.client = client;
+	}
+
+
+
+
+	public Date getOrderDate() {
+		return orderDate;
+	}
+
+
+
+
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
+	}
+	
+	@ManyToMany
+    @JoinTable(
+        name = "order_medicament",
+        joinColumns = @JoinColumn(name = "order_id"),
+        inverseJoinColumns = @JoinColumn(name = "medicament_id")
+    )
+    private List<Medicament> medicaments;
+
+
+
+    public List<Medicament> getMedicaments() {
+        return medicaments;
+    }
+
+    public void setMedicaments(List<Medicament> medicaments) {
+        this.medicaments = medicaments;
+    }
 }
 
-public void setId(Long id) {
-	this.id = id;
-}
-
-public List<OrderItem> getItems() {
-	return items;
-}
-
-public void setItems(List<OrderItem> items) {
-	this.items = items;
-}
-@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-private List<OrderItem> items = new ArrayList<>();
 
 
-}
-*/
+
